@@ -1534,7 +1534,8 @@ analysis_options = [
 selected_analysis = st.sidebar.selectbox("Analyse auswählen:", analysis_options)
 
 # ========== Feste Dateien laden ==========
-geojson_path = r"C:\Users\Benjamin\Documents\Data-Science Hausarbeit\stadtteile-statistische-bezirke-muenster.geojson"
+geojson_path = "stadtteile-statistische-bezirke-muenster.geojson"
+# geojson_path = r"C:\Users\Benjamin\Documents\Data-Science Hausarbeit\stadtteile-statistische-bezirke-muenster.geojson"
 if os.path.exists(geojson_path):
     gebiete = gpd.read_file(geojson_path)
 else:
