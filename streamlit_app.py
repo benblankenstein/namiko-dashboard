@@ -1551,29 +1551,30 @@ if uploaded_archive is not None:
         archive_path = os.path.join(tmpdir, "data.7z")
         with open(archive_path, "wb") as f:
             f.write(uploaded_archive.read())
-
+            
         try:
-        # Für Passwortschutz ggf. Passwortfeld einbauen: password = st.text_input("Passwort für Archiv:", type="password")
-        #password = None
-        with py7zr.SevenZipFile(archive_path, mode='r', password=password) as archive:
-            archive.extractall(path=tmpdir)
-    
+            password = st.text_input("Passwort für Archiv:", type="password")
+            
+            with py7zr.SevenZipFile(archive_path, mode='r', password=password) as archive:
+                archive.extractall(path=tmpdir)
+
             # ==================== NEUER DEBUG-CODE START ====================
             # Lassen wir uns alle extrahierten Dateien und Ordner anzeigen
             with st.expander("🔍 DEBUG: Extrahierte Dateien anzeigen"):
                 extracted_files = []
                 for root, dirs, files in os.walk(tmpdir):
                     for name in files:
-                        # Wir erzeugen einen relativen Pfad, um ihn mit der file_map zu vergleichen
                         relative_path = os.path.relpath(os.path.join(root, name), tmpdir)
-                        extracted_files.append(relative_path.replace("\\", "/")) # Normalisieren für die Anzeige
+                        extracted_files.append(relative_path.replace("\\", "/"))
                 
                 if extracted_files:
                     st.write("Folgende Dateien wurden im Archiv gefunden:")
                     st.code("\n".join(sorted(extracted_files)))
                 else:
                     st.warning("Es wurden keine Dateien im Archiv gefunden.")
-
+            # ===================== NEUER DEBUG-CODE ENDE =====================
+            
+            # KORREKTUR: file_map außerhalb des expander definieren, damit sie im gesamten try-Block gültig ist.
             file_map = {
                 'customers': 'data/customers.csv',
                 'suppliers': 'data/suppliers.csv',
